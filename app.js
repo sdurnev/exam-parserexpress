@@ -7,6 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var getdatalechRouter = require('./routes/getdatalech');
+var getdatalechrfbgRouter = require('./routes/getdatalechrfbg');
+var getdatalechrfconRouter = require('./routes/getdatalechrfcon');
+var getdatalechinoRouter = require('./routes/getdatalechino');
 var getdatapedRouter = require('./routes/getdataped');
 var getdatastomRouter = require('./routes/getdatastom');
 
@@ -28,6 +31,11 @@ app.use('/users', usersRouter);
 app.use('/getdatalech', getdatalechRouter);
 app.use('/getdataped', getdatapedRouter);
 app.use('/getdatastom', getdatastomRouter);
+
+app.use('/getdatalechrfbg', getdatalechrfbgRouter);
+app.use('/getdatalechino', getdatalechinoRouter);
+app.use('/getdatalechrfcon', getdatalechrfconRouter);
+//getdatalechrfbg
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
