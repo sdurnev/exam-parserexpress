@@ -25,34 +25,52 @@ router.get('/', function (req, res, next) {
 module.exports = router;
 
 function readData(callback) {
-    var ansverAll = [];
+    //var ansverAll = [];
     request({url: currencyUrl, encoding: null}, function (error, response, body) {
         if (!error && response.statusCode === 200) {
             var $ = cheerio.load(translator.convert(body).toString());
             cheerioTableparser($);
             var table = $('table').parsetable(true, true, true);
             //console.log(table);
+            for (n = 0; n < table[0].length; n++) {
+                if (table[0][n] === '№ пп' && table[0][n + 1] === '№ пп') {
+                    for (i = 0; i < table.length; i++) {
+                        table[i].splice(0, n + 2);
+                    }
+                    break;
+                }
+            }
             var ansver = [];
-            //ansver.push([]);
-
             for (i = 0; i < table[2].length; i++) {
-                //var status = 0;
-                //console.log('====0====');
                 if (table[2][i] === 'Дурнев Константин') {
-                    console.log('====1====');
+                    //console.log('====1====');
                     ansver.push({fio: table[2][i]});
                     ansver.push({id: table[4][i]});
                     ansver.push({rating: parseInt(table[0][i])});
-                    ansver.push({facrating: parseInt(table[1][i])});
-                    if (table[13][i] === 'На зачисление'){
+                    ansver.push({ballsumm: parseInt(table[6][i])});
+                    if (table[1][i] === '') {
+                        ansver.push({facrating: 0});
+                    } else {
+                        ansver.push({facrating: parseInt(table[1][i])});
+                    }
+                    if (table[13][i] === 'На зачисление') {
                         ansver.push({status: 1});
-                    } else if (table[13][i] === 'На зачисление на втором этапе'){
+                    } else if (table[13][i] === 'На зачисление на втором этапе') {
                         ansver.push({status: 2});
                     } else {
                         ansver.push({status: 0});
                     }
                 }
             }
+            for (i = 0; i < table[0].length; i++) {
+                if (table[1][i] !== '') {
+                    if (parseInt(table[6][i]) <= ansver[3].ballsumm){
+                        ansver.push({potencial: parseInt(table[1][i])});
+                        break;
+                    }
+                }
+            }
+            //console.log(table);
             callback(ansver);
         } else {
             console.log(error);
