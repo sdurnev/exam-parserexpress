@@ -64,8 +64,12 @@ function readData(callback) {
             }
             for (i = 0; i < table[0].length; i++) {
                 if (table[1][i] !== '') {
-                    if (parseInt(table[6][i]) <= ansver[3].ballsumm){
+                    if (parseInt(table[6][i]) <= ansver[3].ballsumm) {
                         ansver.push({potencial: parseInt(table[1][i])});
+                        break;
+                    }
+                    if (parseInt(table[1][i]) === 350) {
+                        ansver.push({potencial: 351});
                         break;
                     }
                 }
